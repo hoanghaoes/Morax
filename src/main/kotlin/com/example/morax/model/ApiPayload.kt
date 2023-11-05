@@ -24,11 +24,12 @@ data class UserReq(
 )
 
 data class LoginReq(
-    val username: String,
+    val email: String,
     val password: String
 )
 
 data class LoginResp(
     val user: UserResp,
     val accessKey: String,
+    val refreshKey: String,
 )

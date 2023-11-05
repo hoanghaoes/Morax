@@ -29,6 +29,11 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
+	implementation("io.klogging:klogging-spring-boot-starter:0.3.3")
+	// https://mvnrepository.com/artifact/com.google.guava/guava
+	implementation("com.google.guava:guava:32.1.3-jre")
+
+
 	// https://mvnrepository.com/artifact/com.fasterxml.uuid/java-uuid-generator
 	implementation("com.fasterxml.uuid:java-uuid-generator:4.3.0")
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
@@ -38,11 +43,16 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 
-
+	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.springframework.security:spring-security-test")
 }
+
+configurations.implementation {
+	exclude("ch.qos.logback")
+}
+
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {

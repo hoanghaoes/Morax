@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.SecurityFilterChain
@@ -19,8 +21,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler
 class SecurityConfig(
     private val jwtAuthFilter: JwtAuthFilter,
     private val authenticationProvider: AuthenticationProvider,
-    private val logoutService: LogoutHandler,
-    private val authEntryPoint: AuthEntryPoint
+    private val logoutService: LogoutHandler
 ) {
     private val whiteListURL = arrayOf(
         "/api/v1/auth/**",
@@ -39,7 +40,6 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .cors { obj -> obj.disable() }
             .csrf { obj -> obj.disable() }
             .authorizeHttpRequests { req ->
                 req.requestMatchers("/api/v1/user/login")
@@ -49,7 +49,7 @@ class SecurityConfig(
                     .anyRequest()
                     .authenticated()
             }
-            .exceptionHandling{exception -> exception.authenticationEntryPoint(authEntryPoint)}
+//            .exceptionHandling {exception  -> exception.authenticationEntryPoint(authEntryPoint)}
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
             .sessionManagement { STATELESS }
@@ -60,5 +60,13 @@ class SecurityConfig(
             }
 
         return http.build()
+    }
+
+    @Bean
+    fun webSecurityCustomizer(): WebSecurityCustomizer? {
+        return WebSecurityCustomizer { web: WebSecurity ->
+            web.ignoring() // Spring Security should completely ignore URLs starting with /resources/
+                .requestMatchers("/resources/**")
+        }
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+//import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.web.multipart.MultipartFile
 import java.util.stream.Collectors
 
@@ -12,25 +13,32 @@ import java.util.stream.Collectors
 class Model
 
 @Document
-data class User (
+data class User(
     @Id var id: String = "",
     @Indexed(unique = true) val username: String = "",
-    val displayName: String = "",
     @Indexed(unique = true) val email: String = "",
+    val displayName: String = "",
     val password: String = "",
     val role: Role = Role.USER
 ) {
-    companion object{
+    companion object {
         val currentUser: User = User()
 
         fun newUser(userReq: UserReq): User {
             val id = MoraxUtils.newUUID()
-            return User(id, userReq.username, userReq.displayName, userReq.email, userReq.password, Role.USER)
+            return User(
+                id,
+                username = userReq.username,
+                email = userReq.email,
+                displayName = userReq.displayName,
+                password = userReq.password,
+                role = Role.USER
+            )
         }
     }
 }
 
-data class Artifact (
+data class Artifact(
     val id: String,
     val name: String,
     val time: String,
