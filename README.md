@@ -8,8 +8,17 @@ Morax is a backend service for Foocation application - Big project in UI UX clas
 - [Java 17 SE](https://www.java.com/en/download/) and [Kotlin compiler](https://kotlinlang.org/docs/command-line.html) for the compiler
 - Editor like [Visual Studio Code](https://code.visualstudio.com/download) or IDE like [IntelliJ](https://www.jetbrains.com/idea/download/?section=windows)
 - [Gradle](https://gradle.org/install/) for library management
-- [MongoDB community Server](https://www.mongodb.com/try/download/community) for server database, and [Studio 3T](https://studio3t.com/download/) for MongoDB GUI
+- [Studio 3T](https://studio3t.com/download/) for MongoDB GUI
+- [Docker Engine](https://docs.docker.com/engine/install/), [Docker Desktop](https://www.docker.com/products/docker-desktop/) for creating database server 
 
 ### 2. How to run Morax application 
 
-- Download all of these in part 1
+#### Create database server 
+
+- Run `docker-compose up -d` under mongodb to start MongoDB
+
+#### Run Morax springboot
+
+- Clone project 
+- Open project in Text Editor or IDE 
+- In terminal run this command: `./gradlew bootRun`
