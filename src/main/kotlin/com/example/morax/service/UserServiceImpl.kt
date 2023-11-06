@@ -5,37 +5,47 @@ import com.example.morax.model.*
 import com.example.morax.repo.TokenRepoImpl
 import com.example.morax.repo.UserRepoImpl
 import com.example.morax.util.MoraxUtils
-//import org.springframework.security.authentication.AuthenticationManager
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.http.HttpStatus
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Mono
+import java.util.concurrent.ExecutionException
 
 @Service
 class UserServiceImpl(
     val userRepo: UserRepoImpl,
     val tokenRepo: TokenRepoImpl,
-//    val authenticationManager: AuthenticationManager,
-    val jwtProvider: JwtProvider
+    val authenticationManager: AuthenticationManager,
+    val jwtProvider: JwtProvider,
+    val passwordEncoder: PasswordEncoder,
 ): UserService {
     override fun createUser(@RequestBody userReq: UserReq): Mono<UserResp> {
+        userReq.password = passwordEncoder.encode(userReq.password)
         val user = userRepo.addUser(userReq)
         return Mono.just(UserResp(user))
     }
 
     override fun authenticate(loginReq: LoginReq): Mono<LoginResp> {
-//        authenticationManager.authenticate(
-//            UsernamePasswordAuthenticationToken(
-//                loginReq.email,
-//                loginReq.password
-//            )
-//        )
-        val user = userRepo.findUserByEmail(loginReq.email)
-        val jwtToken = jwtProvider.generateToken(user)
-        val refreshToken = jwtProvider.generateRefreshToken(user)
-        saveToken(user, jwtToken)
-
-        return Mono.just(LoginResp(UserResp(user), jwtToken, refreshToken))
+        try {
+            authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    loginReq.email,
+                    loginReq.password
+                )
+            )
+            val user = userRepo.findUserByEmail(loginReq.email)
+            val jwtToken = jwtProvider.generateToken(user)
+            val refreshToken = jwtProvider.generateRefreshToken(user)
+            saveToken(user, jwtToken)
+            return Mono.just(LoginResp(UserResp(user), jwtToken, refreshToken))
+        }catch (e: BadCredentialsException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong username or password");
+        }
     }
 
     fun saveToken(user: User, jwtToken: String) {

@@ -7,10 +7,9 @@ data:
   mongodb:
     database: morax
     uri: mongodb://root:password@localhost:27017/admin
-    auto-index-creation: true
     table:
-      user: User
-      token: Token
+      user: user
+      token: token
 
 spring:
   data:
@@ -18,9 +17,6 @@ spring:
       auto-index-creation: true
       database: morax
       uri: mongodb://root:password@localhost:27017/admin
-      table:
-        user: User
-        token: Tokens
 
 application:
   security:

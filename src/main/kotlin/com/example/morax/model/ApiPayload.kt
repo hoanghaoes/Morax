@@ -19,8 +19,8 @@ data class UserReq(
     val username: String,
     val displayName: String,
     val email: String,
-    val password: String,
-    val rePassword: String
+    var password: String,
+    var rePassword: String
 )
 
 data class LoginReq(

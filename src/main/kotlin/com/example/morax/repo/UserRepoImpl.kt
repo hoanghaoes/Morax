@@ -2,10 +2,12 @@ package com.example.morax.repo
 
 import com.example.morax.model.User
 import com.example.morax.model.UserReq
-import com.mongodb.DuplicateKeyException
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.insert
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.transaction.support.TransactionTemplate
@@ -16,10 +18,10 @@ class UserRepoImpl(
     val mongoTemplate: MongoTemplate,
     val transactionTemplate: TransactionTemplate,
     @Value("\${data.mongodb.table.user}") val userCol: String
-): UserRepo {
+) : UserRepo {
     override fun addUser(userReq: UserReq): User {
         val newUser = User.newUser(userReq)
-        return transactionTemplate.execute { status ->
+        return transactionTemplate.execute { _ ->
             try {
                 mongoTemplate.insert(newUser, userCol)
             } catch (e: DuplicateKeyException) {
@@ -41,7 +43,12 @@ class UserRepoImpl(
     }
 
     override fun findUserByEmail(email: String): User {
-        TODO("Not yet implemented")
+        val query = Query()
+        query.addCriteria(Criteria.where("email").isEqualTo(email))
+        val users = mongoTemplate.find(query, User::class.java)
+        if (users.isNotEmpty() && users.size == 1) {
+            return users[0]
+        } else throw ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot found user with email $email")
     }
 
     override fun findUserByUserName(username: String): User {

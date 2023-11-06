@@ -5,7 +5,7 @@ import com.example.morax.model.UserResp
 import io.jsonwebtoken.*
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import io.klogging.NoCoLogging
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.security.Key
@@ -17,7 +17,7 @@ class JwtProvider(
     @Value("\${application.security.jwt.secret-key}") private val secretKey: String,
     @Value("\${application.security.jwt.refresh-token.expiration}") private val refreshExpiration: Long,
     @Value("\${application.security.jwt.expiration}") private val tokenExpiration: Long,
-): NoCoLogging {
+) {
     private fun getSigningKey(): Key {
         val keyBytes = Decoders.BASE64.decode(secretKey)
         return Keys.hmacShaKeyFor(keyBytes)
@@ -62,6 +62,7 @@ class JwtProvider(
     }
 
     fun validateToken(token: String): Boolean {
+        val logger = LoggerFactory.getLogger(JwtProvider::class.java);
         try {
             Jwts.parserBuilder()
                 .setSigningKey(getSigningKey()).build()

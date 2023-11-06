@@ -21,7 +21,8 @@ import org.springframework.security.web.authentication.logout.LogoutHandler
 class SecurityConfig(
     private val jwtAuthFilter: JwtAuthFilter,
     private val authenticationProvider: AuthenticationProvider,
-    private val logoutService: LogoutHandler
+    private val logoutService: LogoutHandler,
+    private val authEntryPoint: AuthEntryPoint
 ) {
     private val whiteListURL = arrayOf(
         "/api/v1/auth/**",
@@ -42,14 +43,13 @@ class SecurityConfig(
         http
             .csrf { obj -> obj.disable() }
             .authorizeHttpRequests { req ->
-                req.requestMatchers("/api/v1/user/login")
+                req.requestMatchers("/api/v1/user/login", "/api/v1/user/register")
                     .permitAll()
-                    .requestMatchers("/api/v1/user/register")
-                    .permitAll()
+                    .requestMatchers("/error").permitAll()
                     .anyRequest()
                     .authenticated()
             }
-//            .exceptionHandling {exception  -> exception.authenticationEntryPoint(authEntryPoint)}
+            .exceptionHandling {exception  -> exception.authenticationEntryPoint(authEntryPoint)}
             .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
             .sessionManagement { STATELESS }
