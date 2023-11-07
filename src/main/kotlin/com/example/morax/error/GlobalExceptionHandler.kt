@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.bind.support.WebExchangeBindException
@@ -96,7 +95,7 @@ class GlobalExceptionHandler {
      */
     @ExceptionHandler(WebClientException::class)
     fun handleWebClientException(
-        e: WebClientException, request: ServerHttpRequest
+        e: WebClientException, request: HttpServletRequest
     ): ResponseEntity<ErrorResp> {
         val finalEx = getFinalCause(e)
         val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
@@ -165,11 +164,11 @@ class GlobalExceptionHandler {
      * @return ErrorResp
      */
     @ExceptionHandler(Exception::class)
-    fun handleException(ex: Exception, request: ServerHttpRequest): ResponseEntity<ErrorResp> {
+    fun handleException(ex: Exception, request: HttpServletRequest): ResponseEntity<ErrorResp> {
         getFinalCause(ex)
         val resp: ErrorResp = buildErrorResp(request, HttpStatus.INTERNAL_SERVER_ERROR)
         resp.addError(
-            GenericError("An unexpected error has happened. Please report to the team.")
+            GenericError(ex.message)
         )
         return ResponseEntity<ErrorResp>(resp, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -215,13 +214,13 @@ class GlobalExceptionHandler {
         return resp
     }
 
-    private fun buildErrorResp(request: ServerHttpRequest, status: HttpStatus): ErrorResp {
+    private fun buildErrorResp(request: HttpServletRequest, status: HttpStatus): ErrorResp {
         return ErrorResp(
             timestamp = Instant.now().toEpochMilli(),
-            path = request.path.value(),
+            path = request.servletPath,
             status = status,
-            requestId = request.id,
-            traceId = request.id
+            requestId = request.requestId,
+            traceId = request.requestId
         )
 
     }

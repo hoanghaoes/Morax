@@ -48,6 +48,20 @@ class UserServiceImpl(
         }
     }
 
+    override fun getCurrentUser(): Mono<UserResp> {
+        val id = User.currentUser.id;
+        return getUserById(id)
+    }
+
+    override fun getUserById(id: String): Mono<UserResp> {
+        val user = userRepo.findUserById(id)
+        return Mono.just(UserResp(user))
+    }
+
+    override fun searchUser(): Mono<List<UserResp>> {
+        TODO("Not yet implemented")
+    }
+
     fun saveToken(user: User, jwtToken: String) {
         val tokenId = MoraxUtils.newUUID()
         val token = Token(id = tokenId, token = jwtToken, userId = user.id)

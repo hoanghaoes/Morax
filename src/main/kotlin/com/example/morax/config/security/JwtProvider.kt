@@ -30,7 +30,7 @@ class JwtProvider(
     fun generateRefreshToken(
         user: User
     ): String {
-        return doGenerateToken(HashMap(), user.username, refreshExpiration)
+        return doGenerateToken(HashMap(), user.email, refreshExpiration)
     }
 
     fun <T> getClaimsFromToken(token: String, claimsResolver: Function<Claims, T>): T {
@@ -48,7 +48,7 @@ class JwtProvider(
         val claims: MutableMap<String, Any> = HashMap()
         val userResp = UserResp(user)
         claims["user"] = userResp
-        return doGenerateToken(claims, user.username, tokenExpiration)
+        return doGenerateToken(claims, user.email, tokenExpiration)
     }
 
     private fun doGenerateToken(claims: Map<String, Any>, subject: String, expiration: Long): String {

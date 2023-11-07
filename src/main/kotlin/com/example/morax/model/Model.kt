@@ -8,18 +8,26 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.web.multipart.MultipartFile
 import java.util.stream.Collectors
 
-
-class Model
+interface FoocationIdentity{
+    var id: String
+    val username: String
+    val email: String
+    val displayName: String
+    val password: String
+    val role: Role
+}
 
 @Document
 data class User(
-    @Id var id: String = "",
-    @Indexed(unique = true) val username: String = "",
-    @Indexed(unique = true) val email: String = "",
-    val displayName: String = "",
-    val password: String = "",
-    val role: Role = Role.USER
-) {
+    @Id override var id: String = "",
+    @Indexed(unique = true) override val username: String = "",
+    @Indexed(unique = true) override val email: String = "",
+    override val displayName: String = "",
+    override val password: String = "",
+    override val role: Role = Role.USER,
+    val rankingPoint: Int = 0,
+    val balance: Int = 0
+): FoocationIdentity {
     companion object {
         val currentUser: User = User()
 
@@ -36,6 +44,16 @@ data class User(
         }
     }
 }
+
+data class Staff(
+    override var id: String,
+    override val username: String,
+    override val email: String,
+    override val displayName: String,
+    override val password: String,
+    override val role: Role = Role.MANAGER,
+    val phoneNumber: String
+): FoocationIdentity
 
 data class Artifact(
     val id: String,
@@ -57,7 +75,8 @@ data class Location(
     val name: String,
     val nameInMap: String,
     val latitude: String,
-    val longitude: String
+    val longitude: String,
+    val description: String
 )
 
 data class Quiz(

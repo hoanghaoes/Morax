@@ -20,7 +20,7 @@ class UserController(val userService: UserServiceImpl) {
 
     @GetMapping
     fun getCurrentUser(): Mono<UserResp> {
-        return TODO("Provide the return value")
+        return userService.getCurrentUser()
     }
 
     @PostMapping("/refresh-token")

@@ -39,7 +39,8 @@ class UserRepoImpl(
     }
 
     override fun findUserById(id: String): User {
-        TODO("Not yet implemented")
+        return mongoTemplate.findById(id, User::class.java)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user wwith id $id")
     }
 
     override fun findUserByEmail(email: String): User {

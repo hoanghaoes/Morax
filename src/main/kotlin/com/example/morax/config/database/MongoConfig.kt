@@ -30,7 +30,6 @@ class MongoConfig(
         val connectionStr = ConnectionString(mongoUri)
         val mongoClientSettings = MongoClientSettings.builder()
             .applyConnectionString(connectionStr)
-            .readPreference(ReadPreference.secondary())
             .writeConcern(WriteConcern.ACKNOWLEDGED)
             .readConcern(ReadConcern.AVAILABLE)
             .build()

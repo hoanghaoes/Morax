@@ -9,4 +9,7 @@ import reactor.core.publisher.Mono
 interface UserService {
     fun createUser(userReq: UserReq): Mono<UserResp>
     fun authenticate(loginReq: LoginReq): Mono<LoginResp>
+    fun getCurrentUser(): Mono<UserResp>
+    fun getUserById(id: String): Mono<UserResp>
+    fun searchUser(): Mono<List<UserResp>>
 }

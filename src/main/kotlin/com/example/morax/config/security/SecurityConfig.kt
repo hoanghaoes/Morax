@@ -25,17 +25,16 @@ class SecurityConfig(
     private val authEntryPoint: AuthEntryPoint
 ) {
     private val whiteListURL = arrayOf(
-        "/api/v1/auth/**",
-        "/v2/api-docs",
-        "/v3/api-docs",
-        "/v3/api-docs/**",
+        "api/v1/user/login",
+        "/api/v1/user/register",
         "/swagger-resources",
         "/swagger-resources/**",
         "/configuration/ui",
         "/configuration/security",
         "/swagger-ui/**",
         "/webjars/**",
-        "/swagger-ui.html"
+        "/swagger-ui.html",
+        "/error"
     )
 
     @Bean
@@ -43,9 +42,7 @@ class SecurityConfig(
         http
             .csrf { obj -> obj.disable() }
             .authorizeHttpRequests { req ->
-                req.requestMatchers("/api/v1/user/login", "/api/v1/user/register")
-                    .permitAll()
-                    .requestMatchers("/error").permitAll()
+                req.requestMatchers(*whiteListURL).permitAll()
                     .anyRequest()
                     .authenticated()
             }
@@ -60,13 +57,5 @@ class SecurityConfig(
             }
 
         return http.build()
-    }
-
-    @Bean
-    fun webSecurityCustomizer(): WebSecurityCustomizer? {
-        return WebSecurityCustomizer { web: WebSecurity ->
-            web.ignoring() // Spring Security should completely ignore URLs starting with /resources/
-                .requestMatchers("/resources/**")
-        }
     }
 }
