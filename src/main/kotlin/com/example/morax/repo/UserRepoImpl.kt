@@ -53,7 +53,13 @@ class UserRepoImpl(
     }
 
     override fun findUserByUserName(username: String): User {
-        TODO("Not yet implemented")
+        val query = Query()
+        query.addCriteria(Criteria.where("username").isEqualTo(username))
+        val users = mongoTemplate.find(query, User::class.java)
+        if (users.isNotEmpty() && users.size == 1) {
+            return users[0]
+        } else throw ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot found user with username $username")
+
     }
 
     override fun findUserByUsernameStartWith(username: String): List<User> {

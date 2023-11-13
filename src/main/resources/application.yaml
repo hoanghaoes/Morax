@@ -10,6 +10,8 @@ data:
     table:
       user: user
       token: token
+      locations: locations
+      artifacts: artifacts
 
 spring:
   data:
@@ -25,3 +27,8 @@ application:
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
+
+logging:
+  level:
+    org.springframework.security: TRACE
+

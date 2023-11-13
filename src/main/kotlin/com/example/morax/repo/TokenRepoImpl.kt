@@ -21,7 +21,7 @@ class TokenRepoImpl(
     }
 
     override fun addToken(token: Token): Token {
-        return mongoTemplate.save(token)
+        return mongoTemplate.save(token, tokenCol)
     }
 
     override fun updateToken(token: Token): Token {

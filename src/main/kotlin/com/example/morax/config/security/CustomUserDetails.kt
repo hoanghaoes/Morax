@@ -4,6 +4,7 @@ import com.example.morax.model.User
 import com.example.morax.model.UserResp
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import java.util.Collections
 
 
 class CustomUserDetails(private val user: User): UserDetails  {
@@ -12,8 +13,8 @@ class CustomUserDetails(private val user: User): UserDetails  {
         return UserResp(user)
     }
 
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return user.role.getAuthorities().toMutableList()
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority?>? {
+        return user.role.authorities.toMutableList()
     }
 
     override fun getPassword(): String {

@@ -29,6 +29,7 @@ import java.util.*
 @Slf4j
 @RestControllerAdvice
 class GlobalExceptionHandler {
+    val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
     /**
      * Process error contained in ResponseStatusException, caused by System Exceptions that are
      * known.
@@ -40,7 +41,6 @@ class GlobalExceptionHandler {
     @ExceptionHandler(ResponseStatusException::class)
     fun handleResponseStatusException(request: HttpServletRequest, ex: ResponseStatusException)
         : ResponseEntity<ErrorResp?> {
-        val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
         logger.error(ex.message)
         val resp: ErrorResp = buildErrorResp(ex, request)
 
@@ -98,7 +98,6 @@ class GlobalExceptionHandler {
         e: WebClientException, request: HttpServletRequest
     ): ResponseEntity<ErrorResp> {
         val finalEx = getFinalCause(e)
-        val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
         logger.error(e.message)
         var finalErrorMessage = finalEx!!.message
         if (finalErrorMessage == null) {
@@ -153,7 +152,7 @@ class GlobalExceptionHandler {
             val field = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, error.field)
             resp.addError(InputError(field, error.defaultMessage))
         }
-//        logErrors(request, resp)
+        logger.error(ex.message)
         return ResponseEntity(resp, ex.statusCode)
     }
 

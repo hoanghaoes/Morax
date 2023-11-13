@@ -7,7 +7,9 @@ import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ResponseStatusException
 import java.security.Key
 import java.util.*
 import java.util.function.Function
@@ -70,13 +72,16 @@ class JwtProvider(
             return true
         } catch (ex: MalformedJwtException) {
             logger.error("Invalid JWT token")
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid JWT token")
         } catch (ex: ExpiredJwtException) {
             logger.error("Expired JWT token")
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Expired JWT token")
         } catch (ex: UnsupportedJwtException) {
             logger.error("Unsupported JWT token")
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unsupported JWT token")
         } catch (ex: IllegalArgumentException) {
             logger.error("JWT claims string is empty.")
+            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT claims string is empty.")
         }
-        return false
     }
 }

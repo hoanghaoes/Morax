@@ -15,8 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 class AppConfig(
-    private val userDetailsService: JwtUserDetailsService,
-    private val userRepo: UserRepo
+    private val userDetailsService: JwtUserDetailsService
     ) {
     @Bean
     fun passwordEncoder(): PasswordEncoder {
@@ -26,16 +25,9 @@ class AppConfig(
     @Bean
     fun authenticationProvider(): AuthenticationProvider {
         val authProvider = DaoAuthenticationProvider()
-        authProvider.setUserDetailsService(userDetailsService())
+        authProvider.setUserDetailsService(userDetailsService)
         authProvider.setPasswordEncoder(passwordEncoder())
         return authProvider
-    }
-
-    @Bean
-    fun userDetailsService(): UserDetailsService? {
-        return UserDetailsService { username: String ->
-            userDetailsService.loadUserByUsername(username)
-        }
     }
 
     @Bean
@@ -43,3 +35,4 @@ class AppConfig(
         return config.authenticationManager
     }
 }
+
