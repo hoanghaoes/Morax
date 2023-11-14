@@ -9,14 +9,14 @@ import reactor.core.publisher.Mono
 
 @Service
 class ArtifactServiceImpl(val artifactRepo: ArtifactRepoImpl): ArtifactService {
-    override fun addArtifact(artifactReq: ArtifactReq): Mono<ArtifactResp> {
-        val newArtifact = Artifact(artifactReq)
+    override fun addArtifact(artifactReq: ArtifactReq, locationId: String): Mono<ArtifactResp> {
+        val newArtifact = Artifact(artifactReq, locationId)
         val artifactResp = ArtifactResp(artifactRepo.addArtifact(newArtifact))
         return Mono.just(artifactResp)
     }
 
-    override fun updateArtifact(artifactReq: ArtifactReq, id: String): Mono<ArtifactResp> {
-        val artifactResp = ArtifactResp(artifactRepo.updateArtifact(artifactReq, id))
+    override fun updateArtifact(artifactReq: ArtifactReq, artifactId: String, locationId: String): Mono<ArtifactResp> {
+        val artifactResp = ArtifactResp(artifactRepo.updateArtifact(artifactReq, artifactId, locationId))
         return Mono.just(artifactResp)
     }
 

@@ -19,10 +19,10 @@ class ArtifactRepoImpl(
         return mongoTemplate.save(artifact, artifactCol)
     }
 
-    override fun updateArtifact(artifactReq: ArtifactReq, id: String): Artifact {
+    override fun updateArtifact(artifactReq: ArtifactReq, artifactId: String, locationId: String): Artifact {
         return transactionTemplate.execute { _ ->
-            val artifact = artifactById(id)
-            val updatedArtifact = artifact.update(artifactReq)
+            val artifact = artifactById(artifactId)
+            val updatedArtifact = artifact.update(artifactReq, locationId)
             return@execute mongoTemplate.save(updatedArtifact, artifactCol)
         } ?: throw ResponseStatusException(
             HttpStatus.INTERNAL_SERVER_ERROR,

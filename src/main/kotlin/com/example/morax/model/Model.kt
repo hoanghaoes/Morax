@@ -65,21 +65,21 @@ data class Artifact(
     val image: Binary,
     val description: String
 ){
-    constructor(artifactReq: ArtifactReq): this(
+    constructor(artifactReq: ArtifactReq, locationId: String): this(
         MoraxUtils.newUUID(),
         artifactReq.name,
         artifactReq.time,
-        artifactReq.locationId,
+        locationId,
         Binary(BsonBinarySubType.BINARY, artifactReq.image.bytes),
         artifactReq.description
     )
 
-    fun update(artifactReq: ArtifactReq): Artifact {
+    fun update(artifactReq: ArtifactReq, locationId: String): Artifact {
         return this.copy(
             id = this.id,
             name = artifactReq.name,
             time = artifactReq.time,
-            locationId = artifactReq.locationId,
+            locationId = locationId,
             image = Binary(BsonBinarySubType.BINARY, artifactReq.image.bytes),
             description = artifactReq.description
         )

@@ -90,7 +90,6 @@ data class ArtifactResp(
 data class ArtifactReq(
     val name: String,
     val time: String,
-    val locationId: String,
     val image: MultipartFile,
     val description: String
 )

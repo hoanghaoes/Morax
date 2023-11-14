@@ -38,7 +38,7 @@ class LocationArtifactController(
 
     @PostMapping("/{id}/artifacts")
     fun addArtifact(@PathVariable("id") locationId: String, @RequestBody artifactReq: ArtifactReq): Mono<ArtifactResp> {
-        return artifactService.addArtifact(artifactReq)
+        return artifactService.addArtifact(artifactReq, locationId)
     }
 
     @PutMapping("/{locationId}/artifacts/{artifactId}")
@@ -46,7 +46,7 @@ class LocationArtifactController(
         @PathVariable("locationId") locationId: String,
         @PathVariable("artifactId") artifactId: String,
         @RequestBody artifactReq: ArtifactReq): Mono<ArtifactResp> {
-        return artifactService.updateArtifact(artifactReq, artifactId)
+        return artifactService.updateArtifact(artifactReq, artifactId, locationId)
     }
 
     @GetMapping("/{locationId}/artifacts")
