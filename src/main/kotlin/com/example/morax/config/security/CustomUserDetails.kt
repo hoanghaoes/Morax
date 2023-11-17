@@ -13,9 +13,10 @@ class CustomUserDetails(private val user: User): UserDetails  {
         return UserResp(user)
     }
 
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority?>? {
-        return user.role.authorities.toMutableList()
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority>? {
+        return null
     }
+
 
     override fun getPassword(): String {
         return user.password

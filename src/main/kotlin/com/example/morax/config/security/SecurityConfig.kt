@@ -1,5 +1,6 @@
 package com.example.morax.config.security
 
+import jakarta.servlet.DispatcherType
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationProvider
@@ -18,7 +19,7 @@ import java.util.*
 
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity()
 class SecurityConfig(
     private val jwtAuthFilter: JwtAuthFilter,
     private val authenticationProvider: AuthenticationProvider,
@@ -45,10 +46,11 @@ class SecurityConfig(
             .cors { cors -> cors.disable() }
             .authorizeHttpRequests { req ->
                 req.requestMatchers(*whiteListURL).permitAll()
+                    .dispatcherTypeMatchers(DispatcherType.ASYNC, DispatcherType.FORWARD).permitAll()
                     .anyRequest()
-                    .permitAll()
+                    .authenticated()
+
             }
-//            .httpBasic {auth  -> auth.authenticationEntryPoint(authEntryPoint)}
             .exceptionHandling {exception  -> exception.authenticationEntryPoint(authEntryPoint)}
             .authenticationProvider(authenticationProvider)
             .sessionManagement { STATELESS }

@@ -3,7 +3,9 @@ package com.example.morax.controller
 import com.example.morax.model.EventReq
 import com.example.morax.model.EventResp
 import com.example.morax.service.EventServiceImpl
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -15,8 +17,8 @@ import reactor.core.publisher.Mono
 @RequestMapping("api/v1/events")
 class EventController(val eventService: EventServiceImpl) {
 
-    @PostMapping
-    fun createEvent(@RequestBody eventReq: EventReq): Mono<EventResp> {
+    @PostMapping("", MediaType.MULTIPART_FORM_DATA_VALUE)
+    fun createEvent(@ModelAttribute eventReq: EventReq): Mono<EventResp> {
         return eventService.addEvents(eventReq)
     }
     @GetMapping

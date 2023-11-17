@@ -72,16 +72,13 @@ class JwtProvider(
             return true
         } catch (ex: MalformedJwtException) {
             logger.error("Invalid JWT token")
-            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid JWT token")
         } catch (ex: ExpiredJwtException) {
             logger.error("Expired JWT token")
-            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Expired JWT token")
         } catch (ex: UnsupportedJwtException) {
             logger.error("Unsupported JWT token")
-            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unsupported JWT token")
         } catch (ex: IllegalArgumentException) {
             logger.error("JWT claims string is empty.")
-            throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "JWT claims string is empty.")
         }
+        return false
     }
 }

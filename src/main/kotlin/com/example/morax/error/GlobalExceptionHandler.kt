@@ -7,10 +7,12 @@ import com.google.common.base.Joiner
 import com.google.common.base.Strings
 import jakarta.servlet.http.HttpServletRequest
 import lombok.extern.slf4j.Slf4j
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.InsufficientAuthenticationException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.bind.support.WebExchangeBindException
@@ -29,7 +31,7 @@ import java.util.*
 @Slf4j
 @RestControllerAdvice
 class GlobalExceptionHandler {
-    val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
+    val logger: Logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
     /**
      * Process error contained in ResponseStatusException, caused by System Exceptions that are
      * known.
@@ -84,6 +86,18 @@ class GlobalExceptionHandler {
         val resp: ErrorResp = buildErrorResp(ex, request)
 //        logErrors(request, resp)
         return ResponseEntity<ErrorResp?>(resp, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(InsufficientAuthenticationException::class)
+    fun handleAuthenticationException(
+        ex: InsufficientAuthenticationException, request: HttpServletRequest
+    ): ResponseEntity<ErrorResp?> {
+        val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
+        logger.error(ex.message)
+        val resp: ErrorResp = buildErrorResp(request, HttpStatus.UNAUTHORIZED)
+        resp.addError(GenericError(ex.message))
+//        logErrors(request, resp)
+        return ResponseEntity<ErrorResp?>(resp, HttpStatus.UNAUTHORIZED)
     }
 
     /**
@@ -164,11 +178,14 @@ class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception::class)
     fun handleException(ex: Exception, request: HttpServletRequest): ResponseEntity<ErrorResp> {
+        println("This is exception")
         getFinalCause(ex)
+        logger.error(ex.javaClass.name)
         val resp: ErrorResp = buildErrorResp(request, HttpStatus.INTERNAL_SERVER_ERROR)
         resp.addError(
             GenericError(ex.message)
         )
+
         return ResponseEntity<ErrorResp>(resp, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
