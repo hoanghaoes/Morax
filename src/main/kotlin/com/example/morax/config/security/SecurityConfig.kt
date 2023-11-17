@@ -18,7 +18,7 @@ import java.util.*
 
 
 @Configuration
-@EnableWebSecurity()
+@EnableWebSecurity(debug = true)
 class SecurityConfig(
     private val jwtAuthFilter: JwtAuthFilter,
     private val authenticationProvider: AuthenticationProvider,

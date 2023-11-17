@@ -36,21 +36,21 @@ class LocationArtifactController(
         return locationsService.locationWithId(id)
     }
 
-    @PostMapping("/{id}/artifacts")
-    fun addArtifact(@PathVariable("id") locationId: String, @RequestBody artifactReq: ArtifactReq): Mono<ArtifactResp> {
+    @PostMapping("/{id}/artifacts", MediaType.MULTIPART_FORM_DATA_VALUE)
+    fun addArtifact(@PathVariable("id") locationId: String, @ModelAttribute artifactReq: ArtifactReq): Mono<ArtifactResp> {
         return artifactService.addArtifact(artifactReq, locationId)
     }
 
-    @PutMapping("/{locationId}/artifacts/{artifactId}")
+    @PutMapping("/{locationId}/artifacts/{artifactId}", MediaType.MULTIPART_FORM_DATA_VALUE)
     fun updateArtifact(
         @PathVariable("locationId") locationId: String,
         @PathVariable("artifactId") artifactId: String,
-        @RequestBody artifactReq: ArtifactReq): Mono<ArtifactResp> {
+        @ModelAttribute artifactReq: ArtifactReq): Mono<ArtifactResp> {
         return artifactService.updateArtifact(artifactReq, artifactId, locationId)
     }
 
     @GetMapping("/{locationId}/artifacts")
-    fun searchArtifact(@RequestParam(required = false) searchText: String): Mono<List<ArtifactResp>> {
+    fun searchArtifact(@RequestParam(required = false) searchText: String?): Mono<List<ArtifactResp>> {
         return artifactService.listArtifact(searchText)
     }
 }

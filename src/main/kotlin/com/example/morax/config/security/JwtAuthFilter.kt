@@ -34,10 +34,6 @@ class JwtAuthFilter(
             filterChain.doFilter(request, response);
             return;
         }
-        if (request.getHeader("Authorization") == null || !request.getHeader("Authorization").startsWith("Bearer ")) {
-            filterChain.doFilter(request, response)
-            return;
-        }
 
         try {
             val jwt = getJwtFromRequest(request)

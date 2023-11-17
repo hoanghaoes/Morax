@@ -125,6 +125,22 @@ data class Location(
     }
 }
 
+data class Event(
+    val id: String,
+    val eventName: String,
+    val time: String,
+    val address: String,
+    val image: Binary,
+) {
+    constructor(eventReq: EventReq) : this(
+        id = MoraxUtils.newUUID(),
+        eventReq.eventName,
+        eventReq.time,
+        eventReq.address,
+        Binary(BsonBinarySubType.BINARY, eventReq.image.bytes),
+    )
+}
+
 data class Quiz(
     val id: String,
     val question: String,

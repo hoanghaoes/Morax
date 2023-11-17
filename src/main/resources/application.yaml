@@ -12,6 +12,7 @@ data:
       token: token
       locations: locations
       artifacts: artifacts
+      events: events
 
 spring:
   data:

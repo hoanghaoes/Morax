@@ -93,3 +93,27 @@ data class ArtifactReq(
     val image: MultipartFile,
     val description: String
 )
+
+data class EventReq(
+    val eventName: String,
+    val time: String,
+    val address: String,
+    val image: MultipartFile,
+)
+
+data class EventResp(
+    val id: String,
+    val eventName: String,
+    val time: String,
+    val address: String,
+    val image: Binary,
+) {
+    constructor(event: Event): this(
+        event.id,
+        eventName = event.eventName,
+        time = event.time,
+        address = event.address,
+        image = event.image
+    )
+}
+
