@@ -44,6 +44,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.projectlombok/lombok
 	compileOnly("org.projectlombok:lombok:1.18.30")
 
+	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+
+
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")

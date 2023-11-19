@@ -33,3 +33,7 @@ logging:
   level:
     org.springframework.security: TRACE
 
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

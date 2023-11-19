@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("api/v1/locations")
-class LocationArtifactController(
+class LocationController(
     val locationsService: LocationsServiceImpl,
     val artifactService: ArtifactServiceImpl
     ) {
@@ -52,5 +52,10 @@ class LocationArtifactController(
     @GetMapping("/{locationId}/artifacts")
     fun searchArtifact(@RequestParam(required = false) searchText: String?): Mono<List<ArtifactResp>> {
         return artifactService.listArtifact(searchText)
+    }
+
+    @PostMapping("/{id}/quizs", MediaType.MULTIPART_FORM_DATA_VALUE)
+    fun addQuiz(@PathVariable("id") locationId: String, @ModelAttribute artifactReq: ArtifactReq): Mono<ArtifactResp> {
+        return artifactService.addArtifact(artifactReq, locationId)
     }
 }
