@@ -48,6 +48,9 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
 
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools
+	implementation("org.springframework.boot:spring-boot-devtools:3.1.5")
+
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")

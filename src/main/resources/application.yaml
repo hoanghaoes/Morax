@@ -13,6 +13,8 @@ data:
       locations: locations
       artifacts: artifacts
       events: events
+      quizzes: quizzes
+
 
 spring:
   data:
@@ -37,3 +39,4 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+    operations-sorter: alpha

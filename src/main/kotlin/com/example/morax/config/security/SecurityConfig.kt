@@ -51,7 +51,7 @@ class SecurityConfig(
                 req.requestMatchers(*whiteListURL).permitAll()
                     .dispatcherTypeMatchers(DispatcherType.ASYNC, DispatcherType.FORWARD).permitAll()
                     .anyRequest()
-                    .authenticated()
+                    .permitAll()
 
             }
             .exceptionHandling {exception  -> exception.authenticationEntryPoint(authEntryPoint)}

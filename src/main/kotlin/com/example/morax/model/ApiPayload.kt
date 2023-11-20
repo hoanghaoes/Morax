@@ -117,3 +117,32 @@ data class EventResp(
     )
 }
 
+data class QuizReq(
+    val locationId: String,
+    val question: String,
+    val point: Int,
+    val correctAnswer: String,
+    val image: MultipartFile
+)
+
+
+data class QuizResp(
+    val id: String,
+    val locationId: String,
+    val question: String,
+    val point: Int,
+    val correctAnswer: String,
+    val image: Binary,
+    val answer: List<Answer>
+)
+
+data class AnswerReq(
+    val quizId: String,
+    val answer: String,
+)
+
+data class AnswerResp(
+    val id: String,
+    val quizId: String,
+    val answer: String
+)

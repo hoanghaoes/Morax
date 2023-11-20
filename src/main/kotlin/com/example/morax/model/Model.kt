@@ -145,7 +145,8 @@ data class Quiz(
     val id: String,
     val question: String,
     val correctAnswer: String,
-    val point: Int
+    val point: Int,
+    val image: Binary
 )
 
 data class Answer(
