@@ -14,6 +14,7 @@ data:
       artifacts: artifacts
       events: events
       quizzes: quizzes
+      answers: answers
 
 
 spring:

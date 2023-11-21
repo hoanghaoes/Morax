@@ -15,14 +15,15 @@ import org.springframework.web.server.ResponseStatusException
 @Component
 class QuizRepoImpl(
     val mongoTemplate: MongoTemplate,
-    @Value("\${data.mongodb.table.quizzes}") val quizCol: String
+    @Value("\${data.mongodb.table.quizzes}") val quizCol: String,
+    @Value("\${data.mongodb.table.answers}") val answerCol: String
 ) : QuizRepo {
     override fun addQuiz(quiz: Quiz): Quiz {
-        return mongoTemplate.save(quiz)
+        return mongoTemplate.save(quiz, quizCol)
     }
 
     override fun updateQuiz(quiz: Quiz): Quiz {
-        return mongoTemplate.save(quiz)
+        return mongoTemplate.save(quiz, quizCol)
     }
 
     override fun getQuizzes(): List<Quiz> {
@@ -46,14 +47,26 @@ class QuizRepoImpl(
     }
 
     override fun addAnswers(answers: List<Answer>): List<Answer> {
-        TODO("Not yet implemented")
+        for(answer in answers) {
+            mongoTemplate.save(answer, answerCol)
+        }
+        return answers
     }
 
-    override fun updateAnswer(answers: List<Answer>): List<Answer> {
-        TODO("Not yet implemented")
+    override fun updateAnswer(answers: List<Answer>, quizId: String): List<Answer> {
+        val query = Query()
+        query.addCriteria(Criteria.where("quizId").isEqualTo(quizId))
+        mongoTemplate.findAndRemove(query, Answer::class.java, answerCol)
+
+        for(answer in answers) {
+            mongoTemplate.save(answer, answerCol)
+        }
+        return answers
     }
 
     override fun getQuizAnswer(quizId: String): List<Answer> {
-        TODO("Not yet implemented")
+        val query = Query()
+        query.addCriteria(Criteria.where("quizId").isEqualTo(quizId))
+        return mongoTemplate.find(query, Answer::class.java, answerCol)
     }
 }

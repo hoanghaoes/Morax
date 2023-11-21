@@ -144,16 +144,32 @@ data class Event(
 data class Quiz(
     val id: String,
     val question: String,
+    val locationId: String,
     val correctAnswer: String,
     val point: Int,
     val image: Binary
-)
+) {
+    constructor(quizReq: QuizReq): this(
+        id = MoraxUtils.newUUID(),
+        question = quizReq.question,
+        locationId = quizReq.locationId,
+        correctAnswer = quizReq.correctAnswer,
+        point = quizReq.point,
+        Binary(BsonBinarySubType.BINARY, quizReq.image.bytes),
+    )
+}
 
 data class Answer(
     val id: String,
     val quizId: String,
-    val content: String
-)
+    val answer: String
+) {
+    constructor(answer: AnswerReq): this(
+        id = MoraxUtils.newUUID(),
+        answer.quizId,
+        answer.answer
+    )
+}
 
 
 enum class Role(emptySet: MutableSet<Permission>) {

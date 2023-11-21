@@ -133,8 +133,18 @@ data class QuizResp(
     val point: Int,
     val correctAnswer: String,
     val image: Binary,
-    val answer: List<Answer>
-)
+    val answers: List<AnswerResp>
+) {
+    constructor(quiz: Quiz, answers: List<AnswerResp>) : this(
+        quiz.id,
+        quiz.locationId,
+        quiz.question,
+        quiz.point,
+        quiz.correctAnswer,
+        quiz.image,
+        answers
+    )
+}
 
 data class AnswerReq(
     val quizId: String,
@@ -145,4 +155,15 @@ data class AnswerResp(
     val id: String,
     val quizId: String,
     val answer: String
+) {
+    constructor(answer: Answer): this(
+        answer.id,
+        answer.quizId,
+        answer.answer
+    )
+}
+
+data class SearchResp(
+    val locations: List<LocationResp>,
+    val artifacts: List<ArtifactResp>
 )

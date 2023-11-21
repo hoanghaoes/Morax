@@ -12,6 +12,6 @@ interface QuizRepo {
     fun deleteQuiz(id: String): Quiz
 
     fun addAnswers(answers: List<Answer>): List<Answer>
-    fun updateAnswer(answers: List<Answer>): List<Answer>
+    fun updateAnswer(answers: List<Answer>, quizId: String): List<Answer>
     fun getQuizAnswer(quizId: String): List<Answer>
 }

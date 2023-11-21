@@ -19,7 +19,7 @@ import java.util.*
 
 
 @Configuration
-@EnableWebSecurity()
+@EnableWebSecurity
 class SecurityConfig(
     private val jwtAuthFilter: JwtAuthFilter,
     private val authenticationProvider: AuthenticationProvider,
@@ -51,7 +51,7 @@ class SecurityConfig(
                 req.requestMatchers(*whiteListURL).permitAll()
                     .dispatcherTypeMatchers(DispatcherType.ASYNC, DispatcherType.FORWARD).permitAll()
                     .anyRequest()
-                    .permitAll()
+                    .authenticated()
 
             }
             .exceptionHandling {exception  -> exception.authenticationEntryPoint(authEntryPoint)}
