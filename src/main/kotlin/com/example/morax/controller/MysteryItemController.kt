@@ -4,12 +4,14 @@ import com.example.morax.model.MysteryItemReq
 import com.example.morax.model.MysteryItemResp
 import com.example.morax.service.MysteryItemServiceImpl
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("api/v1/mystery_item")
+@Tag(name = "Mystery Item")
 class MysteryItemController(
     private val mysteryItemService: MysteryItemServiceImpl
 ){
