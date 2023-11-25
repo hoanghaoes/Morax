@@ -15,6 +15,9 @@ data:
       events: events
       quizzes: quizzes
       answers: answers
+      points: points
+      mystery-items: mystery-items
+      user-history-items: user-history-items
 
 
 spring:

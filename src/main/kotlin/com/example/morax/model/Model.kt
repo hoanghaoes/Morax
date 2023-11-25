@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import java.time.LocalDate
 import java.util.*
 import java.util.stream.Collectors
 
@@ -168,6 +169,46 @@ data class Answer(
         id = MoraxUtils.newUUID(),
         answer.quizId,
         answer.answer
+    )
+}
+
+data class MysteryItem(
+    val id: String,
+    val locationId: String,
+    val point: Int,
+    val foundImage: Binary,
+    val unfoundedImage: Binary
+) {
+    constructor(mysteryItemReq: MysteryItemReq): this(
+        MoraxUtils.newUUID(),
+        mysteryItemReq.locationId,
+        mysteryItemReq.point,
+        Binary(BsonBinarySubType.BINARY, mysteryItemReq.foundImage.bytes),
+        Binary(BsonBinarySubType.BINARY, mysteryItemReq.unfoundedImage.bytes),
+    )
+
+    fun update(mysteryItemReq: MysteryItemReq): MysteryItem {
+        return MysteryItem(
+            this.id,
+            mysteryItemReq.locationId,
+            mysteryItemReq.point,
+            Binary(BsonBinarySubType.BINARY, mysteryItemReq.foundImage.bytes),
+            Binary(BsonBinarySubType.BINARY, mysteryItemReq.unfoundedImage.bytes),
+        )
+    }
+}
+
+data class UserHistoryMysteryItem(
+    val id: String,
+    val userId: String,
+    val itemId: String,
+    val foundAt: LocalDate
+) {
+    constructor(userId: String, itemId: String): this(
+        id = MoraxUtils.newUUID(),
+        userId,
+        itemId,
+        LocalDate.now()
     )
 }
 

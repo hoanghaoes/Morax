@@ -7,13 +7,17 @@ data class UserResp(
     val id: String = "",
     val username: String = "",
     val displayName: String = "",
-    val email: String = ""
+    val email: String = "",
+    val rankingPoint: Int,
+    val balance: Int
 ){
     constructor(user: User) : this(
         id = user.id,
         username = user.username,
         email = user.email,
-        displayName = user.displayName
+        displayName = user.displayName,
+        rankingPoint = user.rankingPoint,
+        balance = user.balance
     )
 }
 
@@ -167,3 +171,30 @@ data class SearchResp(
     val locations: List<LocationResp>,
     val artifacts: List<ArtifactResp>
 )
+
+data class MysteryItemReq(
+    val locationId: String,
+    val point: Int,
+    val foundImage: MultipartFile,
+    val unfoundedImage: MultipartFile
+)
+
+data class MysteryItemResp(
+    val id: String,
+    val locationId: String,
+    val point: Int,
+    val foundImage: Binary,
+    val unfoundedImage: Binary,
+    val isFound: Boolean = false,
+    val foundAt: String? = null
+) {
+    constructor(mysteryItem: MysteryItem, isFound: Boolean = false, foundAt: String? = null): this(
+        mysteryItem.id,
+        mysteryItem.locationId,
+        mysteryItem.point,
+        mysteryItem.foundImage,
+        mysteryItem.unfoundedImage,
+        isFound,
+        foundAt
+    )
+}

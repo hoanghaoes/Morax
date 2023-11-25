@@ -62,7 +62,7 @@ class QuizController(private val quizService: QuizServiceImpl) {
     }
 
     @PostMapping("/{quizId}/answer/correct")
-    fun addCorrectAnswer(@PathVariable quizId: String,) {
+    fun addCorrectAnswer(@PathVariable quizId: String) {
         return
     }
 }
