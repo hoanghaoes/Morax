@@ -28,8 +28,6 @@ data class User(
     override val displayName: String = "",
     override val password: String = "",
     override val role: Role = Role.USER,
-    val rankingPoint: Int = 0,
-    val balance: Int = 0
 ): FoocationIdentity {
     companion object {
         val currentUser: User = User()
@@ -197,6 +195,12 @@ data class MysteryItem(
         )
     }
 }
+
+data class Point(
+    val id: String,
+    val userId: String,
+    val point: Int
+)
 
 data class UserHistoryMysteryItem(
     val id: String,

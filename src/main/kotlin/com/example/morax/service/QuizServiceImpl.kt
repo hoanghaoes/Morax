@@ -17,6 +17,11 @@ class QuizServiceImpl(val quizRepo: QuizRepoImpl):QuizService {
         return Mono.just(QuizResp(quizRepo.addQuiz(newQuiz), listOf()))
     }
 
+    override fun getQuizById(quizId: String): QuizResp {
+        val quiz = quizRepo.quizById(quizId)
+        return QuizResp(quiz, listOf())
+    }
+
     override fun getQuizzes(): Mono<List<QuizResp>> {
         val quizzes = quizRepo.getQuizzes()
         val quizzesResp = getQuizzesResp(quizzes)
@@ -51,5 +56,11 @@ class QuizServiceImpl(val quizRepo: QuizRepoImpl):QuizService {
 
     override fun getQuizAnswer(quizId: String): List<AnswerResp> {
         return quizRepo.getQuizAnswer(quizId).map { answer -> AnswerResp(answer) }
+    }
+
+    override fun answerQuiz(quizId: String, answerId: String): AnswerQuizResp {
+        val quiz = getQuizById(quizId)
+        val answer = quizRepo.answerById(answerId)
+        return AnswerQuizResp(quiz, quiz.correctAnswer == answer.answer)
     }
 }

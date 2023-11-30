@@ -2,6 +2,7 @@ package com.example.morax.service
 
 import com.example.morax.config.security.JwtProvider
 import com.example.morax.model.*
+import com.example.morax.repo.PointRepoImpl
 import com.example.morax.repo.TokenRepoImpl
 import com.example.morax.repo.UserRepoImpl
 import com.example.morax.util.MoraxUtils
@@ -20,6 +21,7 @@ import java.util.concurrent.ExecutionException
 class UserServiceImpl(
     val userRepo: UserRepoImpl,
     val tokenRepo: TokenRepoImpl,
+    val pointRepo: PointRepoImpl,
     val authenticationManager: AuthenticationManager,
     val jwtProvider: JwtProvider,
     val passwordEncoder: PasswordEncoder,
@@ -55,7 +57,10 @@ class UserServiceImpl(
 
     override fun getUserById(id: String): Mono<UserResp> {
         val user = userRepo.findUserById(id)
-        return Mono.just(UserResp(user))
+        val userPoints: Int = pointRepo.pointsByUserId(user.id).sumOf {it.point}
+        val balance = 0 //TODO: Add balance
+        val userResp = UserResp(user, rankingPoint = userPoints, balance = balance)
+        return Mono.just(userResp)
     }
 
     override fun searchUser(): Mono<List<UserResp>> {

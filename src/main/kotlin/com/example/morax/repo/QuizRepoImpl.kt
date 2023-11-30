@@ -14,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @Component
 class QuizRepoImpl(
-    val mongoTemplate: MongoTemplate,
+    private val mongoTemplate: MongoTemplate,
     @Value("\${data.mongodb.table.quizzes}") val quizCol: String,
     @Value("\${data.mongodb.table.answers}") val answerCol: String
 ) : QuizRepo {
@@ -28,6 +28,13 @@ class QuizRepoImpl(
 
     override fun getQuizzes(): List<Quiz> {
         return mongoTemplate.findAll<Quiz>(quizCol)
+    }
+
+    override fun quizById(quizId: String): Quiz {
+        return mongoTemplate.findById(quizId, Quiz::class.java, quizCol) ?: throw ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Cannot find any quiz with id $quizId"
+        )
     }
 
     override fun getQuizzesByLocationId(locationId: String): List<Quiz> {
@@ -47,7 +54,7 @@ class QuizRepoImpl(
     }
 
     override fun addAnswers(answers: List<Answer>): List<Answer> {
-        for(answer in answers) {
+        for (answer in answers) {
             mongoTemplate.save(answer, answerCol)
         }
         return answers
@@ -58,7 +65,7 @@ class QuizRepoImpl(
         query.addCriteria(Criteria.where("quizId").isEqualTo(quizId))
         mongoTemplate.findAndRemove(query, Answer::class.java, answerCol)
 
-        for(answer in answers) {
+        for (answer in answers) {
             mongoTemplate.save(answer, answerCol)
         }
         return answers
@@ -68,5 +75,12 @@ class QuizRepoImpl(
         val query = Query()
         query.addCriteria(Criteria.where("quizId").isEqualTo(quizId))
         return mongoTemplate.find(query, Answer::class.java, answerCol)
+    }
+
+    override fun answerById(answerId: String): Answer {
+        return mongoTemplate.findById(answerId, Answer::class.java, answerCol) ?: throw ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Cannot find any answer with id $answerId"
+        )
     }
 }

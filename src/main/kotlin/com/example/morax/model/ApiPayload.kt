@@ -1,5 +1,6 @@
 package com.example.morax.model
 
+import com.example.morax.util.MoraxUtils
 import org.bson.types.Binary
 import org.springframework.web.multipart.MultipartFile
 
@@ -11,13 +12,13 @@ data class UserResp(
     val rankingPoint: Int,
     val balance: Int
 ){
-    constructor(user: User) : this(
+    constructor(user: User, rankingPoint: Int = 0, balance: Int = 0) : this(
         id = user.id,
         username = user.username,
         email = user.email,
         displayName = user.displayName,
-        rankingPoint = user.rankingPoint,
-        balance = user.balance
+        rankingPoint = rankingPoint,
+        balance = balance
     )
 }
 
@@ -164,6 +165,20 @@ data class AnswerResp(
         answer.id,
         answer.quizId,
         answer.answer
+    )
+}
+
+data class AnswerQuizResp(
+    val id: String,
+    val quiz: QuizResp,
+    val isCorrect: Boolean = true,
+    val point: Int
+){
+    constructor(quiz: QuizResp, isCorrect: Boolean): this(
+        id = MoraxUtils.newUUID(),
+        quiz = quiz,
+        isCorrect = isCorrect,
+        point = quiz.point
     )
 }
 

@@ -9,7 +9,7 @@ import org.springframework.transaction.support.TransactionTemplate
 @Component
 class TokenRepoImpl(
     @Value("\${data.mongodb.table.token}") val tokenCol: String,
-    val mongoTemplate: MongoTemplate,
+    private val mongoTemplate: MongoTemplate,
     val transactionTemplate: TransactionTemplate,
 ): TokenRepo {
     override fun findAllValidTokenByUser(userId: String): List<Token> {

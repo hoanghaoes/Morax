@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException
 
 @Component
 class UserRepoImpl(
-    val mongoTemplate: MongoTemplate,
+    private val mongoTemplate: MongoTemplate,
     val transactionTemplate: TransactionTemplate,
     @Value("\${data.mongodb.table.user}") val userCol: String
 ) : UserRepo {

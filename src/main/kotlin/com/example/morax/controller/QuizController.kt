@@ -1,9 +1,6 @@
 package com.example.morax.controller
 
-import com.example.morax.model.AnswerReq
-import com.example.morax.model.AnswerResp
-import com.example.morax.model.QuizReq
-import com.example.morax.model.QuizResp
+import com.example.morax.model.*
 import com.example.morax.service.QuizServiceImpl
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -61,8 +58,8 @@ class QuizController(private val quizService: QuizServiceImpl) {
         return quizService.updateAnswer(answerReq, quizId)
     }
 
-    @PostMapping("/{quizId}/answer/correct")
-    fun addCorrectAnswer(@PathVariable quizId: String) {
-        return
+    @PostMapping("/{quizId}/answer/{answerId}")
+    fun addCorrectAnswer(@PathVariable quizId: String, @PathVariable answerId: String): Mono<AnswerQuizResp> {
+        return Mono.just(quizService.answerQuiz(quizId, answerId))
     }
 }
