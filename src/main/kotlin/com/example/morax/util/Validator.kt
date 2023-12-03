@@ -14,7 +14,7 @@ class Validator(val passwordEncoder: PasswordEncoder) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Confirm password do not match with new password, please try again")
         }
 
-        if(passwordEncoder.encode(changePasswordReq.oldPassword) != user.password) {
+        if(!passwordEncoder.matches(changePasswordReq.oldPassword, user.password)) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is incorrect")
         }
     }
