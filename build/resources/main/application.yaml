@@ -1,0 +1,46 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+
+data:
+  mongodb:
+    database: morax
+    uri: mongodb+srv://ntn071000:yD7tEO5ktySL8yPc@cluster0.qdkp1vw.mongodb.net/?retryWrites=true&w=majority
+    table:
+      user: user
+      token: token
+      locations: locations
+      artifacts: artifacts
+      events: events
+      quizzes: quizzes
+      answers: answers
+      points: points
+      mystery-items: mystery-items
+      user-history-items: user-history-items
+
+
+spring:
+  data:
+    mongodb:
+      auto-index-creation: true
+      database: morax
+      uri: mongodb+srv://ntn071000:yD7tEO5ktySL8yPc@cluster0.qdkp1vw.mongodb.net/?retryWrites=true&w=majority
+
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
+
+logging:
+  level:
+    org.springframework.security: TRACE
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
