@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.MongoTransactionManager
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.index.Index
 import org.springframework.transaction.support.TransactionTemplate
+import java.util.concurrent.TimeUnit
 
 
 @Configuration
@@ -29,7 +30,16 @@ class MongoConfig(
     fun mongoClient(mongoUri: String): MongoClient {
         val connectionStr = ConnectionString(mongoUri)
         val mongoClientSettings = MongoClientSettings.builder()
+            .retryWrites(true)
             .applyConnectionString(connectionStr)
+            .applyToConnectionPoolSettings{builder ->
+                builder.maxSize(100)
+                    .minSize(5)
+                    .maxConnectionLifeTime(30, TimeUnit.MINUTES)
+            }
+            .applyToSocketSettings{builder ->
+                builder.connectTimeout(2000, TimeUnit.MILLISECONDS)
+            }
             .writeConcern(WriteConcern.ACKNOWLEDGED)
             .readConcern(ReadConcern.AVAILABLE)
             .build()
