@@ -6,7 +6,7 @@ server:
 data:
   mongodb:
     database: morax
-    uri: mongodb+srv://ntn071000:yD7tEO5ktySL8yPc@cluster0.qdkp1vw.mongodb.net/?retryWrites=true&w=majority
+    uri: mongodb+srv://ntn071000:yD7tEO5ktySL8yPc@cluster0.qdkp1vw.mongodb.net/admin
     table:
       user: user
       token: token
