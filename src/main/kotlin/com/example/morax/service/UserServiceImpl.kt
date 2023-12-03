@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.server.ResponseStatusException
 import reactor.core.publisher.Mono
-import java.util.concurrent.ExecutionException
 
 @Service
 class UserServiceImpl(
@@ -46,12 +45,19 @@ class UserServiceImpl(
             saveToken(user, jwtToken)
             return Mono.just(LoginResp(UserResp(user), jwtToken, refreshToken))
         }catch (e: BadCredentialsException) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong username or password");
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Wrong username or password")
         }
     }
 
+    override fun updateUser(userReq: UserReq, userId: String): UserResp {
+        userReq.password = passwordEncoder.encode(userReq.password)
+        val user = userRepo.findUserById(userId)
+        val updatedUser = user.update(userReq)
+        return UserResp(userRepo.updateUser(updatedUser))
+    }
+
     override fun getCurrentUser(): Mono<UserResp> {
-        val id = User.currentUser.id;
+        val id = User.currentUser.id
         return getUserById(id)
     }
 

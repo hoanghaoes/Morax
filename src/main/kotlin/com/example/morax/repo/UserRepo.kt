@@ -5,7 +5,7 @@ import com.example.morax.model.UserReq
 
 interface UserRepo {
     fun addUser(userReq: UserReq): User
-    fun updateUser(userReq: UserReq): User
+    fun updateUser(user: User): User
     fun findUserById(id: String): User
     fun findUserByEmail(email: String): User
     fun findUserByUserName(username: String): User

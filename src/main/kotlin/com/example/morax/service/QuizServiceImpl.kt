@@ -1,12 +1,16 @@
 package com.example.morax.service
 
 import com.example.morax.model.*
+import com.example.morax.repo.PointRepoImpl
 import com.example.morax.repo.QuizRepoImpl
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
 @Service
-class QuizServiceImpl(val quizRepo: QuizRepoImpl):QuizService {
+class QuizServiceImpl(
+    private val quizRepo: QuizRepoImpl,
+    private val pointRepo: PointRepoImpl
+    ):QuizService {
     override fun addQuiz(quizReq: QuizReq): Mono<QuizResp> {
         val newQuiz = Quiz(quizReq)
         return Mono.just(QuizResp(quizRepo.addQuiz(newQuiz), listOf()))
@@ -59,8 +63,15 @@ class QuizServiceImpl(val quizRepo: QuizRepoImpl):QuizService {
     }
 
     override fun answerQuiz(quizId: String, answerId: String): AnswerQuizResp {
+        val userId = User.currentUser.id
         val quiz = getQuizById(quizId)
         val answer = quizRepo.answerById(answerId)
-        return AnswerQuizResp(quiz, quiz.correctAnswer == answer.answer)
+        if(quiz.correctAnswer == answer.answer) {
+            val point = Point(userId, quiz.point)
+            pointRepo.addPoint(point)
+            return AnswerQuizResp(quiz, true)
+        } else {
+            return AnswerQuizResp(quiz, false)
+        }
     }
 }

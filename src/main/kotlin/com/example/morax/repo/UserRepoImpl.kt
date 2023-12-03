@@ -34,13 +34,26 @@ class UserRepoImpl(
         }!!
     }
 
-    override fun updateUser(userReq: UserReq): User {
-        TODO("Not yet implemented")
+    override fun updateUser(user: User): User {
+        return transactionTemplate.execute { _ ->
+            try {
+                val query = Query()
+                query.addCriteria(Criteria.where("id").isEqualTo(user.id))
+                mongoTemplate.findAndRemove(query, User::class.java, userCol)
+                mongoTemplate.save(user, userCol)
+            } catch (e: DuplicateKeyException) {
+                throw ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "User information is already exist"
+                )
+            }
+            return@execute user
+        }!!
     }
 
     override fun findUserById(id: String): User {
         return mongoTemplate.findById(id, User::class.java)
-            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user wwith id $id")
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find user with id $id")
     }
 
     override fun findUserByEmail(email: String): User {

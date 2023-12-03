@@ -44,6 +44,17 @@ data class User(
             )
         }
     }
+
+    fun update(userReq: UserReq): User {
+        return User(
+            this.id,
+            userReq.username,
+            userReq.email,
+            userReq.displayName,
+            userReq.password,
+            this.role
+        )
+    }
 }
 
 data class Staff(
@@ -200,7 +211,12 @@ data class Point(
     val id: String,
     val userId: String,
     val point: Int
-)
+) {
+    constructor(userId: String, point: Int): this(
+        id = MoraxUtils.newUUID(),
+        userId, point
+    )
+}
 
 data class UserHistoryMysteryItem(
     val id: String,

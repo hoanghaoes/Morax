@@ -18,6 +18,11 @@ class UserController(val userService: UserServiceImpl) {
         return userService.authenticate(loginReq)
     }
 
+    @PutMapping("/{userId}")
+    fun updateUser(@RequestBody userReq: UserReq, @PathVariable userId: String): Mono<UserResp> {
+        return Mono.just(userService.updateUser(userReq, userId))
+    }
+
     @GetMapping
     fun getCurrentUser(): Mono<UserResp> {
         return userService.getCurrentUser()
