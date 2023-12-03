@@ -99,9 +99,16 @@ data class Artifact(
 data class Fact(
     val id: String,
     val content: String,
-    val quizId: String?,
-    val artifactId: String?
-)
+    val type: OriginalFactType,
+    val originalId: String
+) {
+    constructor(factReq: FactReq): this(
+        MoraxUtils.newUUID(),
+        factReq.content,
+        factReq.type,
+        factReq.originalId
+    )
+}
 
 data class Location(
     val id: String,
@@ -230,6 +237,10 @@ data class UserHistoryMysteryItem(
         itemId,
         LocalDate.now()
     )
+}
+
+enum class OriginalFactType{
+    LOCATION, QUIZ, MYSTERY_ITEM
 }
 
 

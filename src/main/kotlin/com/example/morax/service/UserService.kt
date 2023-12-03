@@ -1,9 +1,6 @@
 package com.example.morax.service
 
-import com.example.morax.model.LoginReq
-import com.example.morax.model.LoginResp
-import com.example.morax.model.UserReq
-import com.example.morax.model.UserResp
+import com.example.morax.model.*
 import reactor.core.publisher.Mono
 
 interface UserService {
@@ -13,4 +10,5 @@ interface UserService {
     fun getCurrentUser(): Mono<UserResp>
     fun getUserById(id: String): Mono<UserResp>
     fun searchUser(): Mono<List<UserResp>>
+    fun changePassword(userId: String, changePasswordReq: ChangePasswordReq): UserResp
 }

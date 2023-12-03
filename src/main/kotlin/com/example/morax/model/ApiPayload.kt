@@ -213,3 +213,29 @@ data class MysteryItemResp(
         foundAt
     )
 }
+
+data class FactReq(
+    val content: String,
+    val type: OriginalFactType,
+    val originalId: String
+)
+
+data class FactResp(
+    val id: String,
+    val content: String,
+    val type: OriginalFactType,
+    val originalId: String
+) {
+    constructor(fact: Fact): this(
+        fact.id,
+        fact.content,
+        fact.type,
+        fact.originalId
+    )
+}
+
+data class ChangePasswordReq(
+    val oldPassword: String,
+    val newPassword: String,
+    val rePassword: String
+)

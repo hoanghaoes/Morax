@@ -6,6 +6,7 @@ import com.example.morax.repo.PointRepoImpl
 import com.example.morax.repo.TokenRepoImpl
 import com.example.morax.repo.UserRepoImpl
 import com.example.morax.util.MoraxUtils
+import com.example.morax.util.Validator
 import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
@@ -24,6 +25,7 @@ class UserServiceImpl(
     val authenticationManager: AuthenticationManager,
     val jwtProvider: JwtProvider,
     val passwordEncoder: PasswordEncoder,
+    val validator: Validator
 ): UserService {
     override fun createUser(@RequestBody userReq: UserReq): Mono<UserResp> {
         userReq.password = passwordEncoder.encode(userReq.password)
@@ -71,6 +73,13 @@ class UserServiceImpl(
 
     override fun searchUser(): Mono<List<UserResp>> {
         TODO("Not yet implemented")
+    }
+
+    override fun changePassword(userId: String, changePasswordReq: ChangePasswordReq): UserResp {
+        val user = userRepo.findUserById(userId)
+        validator.validChangePassword(changePasswordReq, user)
+        val userReq = UserReq(user.username, user.displayName, user.email, changePasswordReq.newPassword, changePasswordReq.rePassword)
+        return updateUser(userReq, userId)
     }
 
     fun saveToken(user: User, jwtToken: String) {
