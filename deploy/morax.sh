@@ -2,9 +2,10 @@
 
 cd /Users/${USER}/codebase/salon-friday/fridayapps || exit
 
-appName=app
-projectName=morax
-#ng build  ${appName} --configuration=production
+appName=morax
+projectName=foocation
+
+ng build  ${appName} --configuration=production
 cd build/
 cp ../deploy/app.yaml ${appName}.jar
 
@@ -20,7 +21,7 @@ rm -rf www
 mkdir www
 cp -r ${appName}/ www/
 #
-gcloud auth activate-service-account --key-file=/Users/${USER}/.google/salonfriday/deployer@salonfriday.json
+gcloud auth activate-service-account --key-file= C:/Users/NamNT/OneDrive/Desktop/Intern-NguyenThanhNam/Foocation/key/foocation-7051f12b33ef.json
 gcloud config set project ${projectName}
 gcloud app deploy ${appName}.yaml --project=${projectName} -q
 
