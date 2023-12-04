@@ -164,7 +164,8 @@ data class Quiz(
     val locationId: String,
     val correctAnswer: String,
     val point: Int,
-    val image: Binary
+    val image: Binary,
+    val description: String?
 ) {
     constructor(quizReq: QuizReq): this(
         id = MoraxUtils.newUUID(),
@@ -173,6 +174,7 @@ data class Quiz(
         correctAnswer = quizReq.correctAnswer,
         point = quizReq.point,
         Binary(BsonBinarySubType.BINARY, quizReq.image.bytes),
+        description = quizReq.description
     )
 }
 
@@ -190,26 +192,32 @@ data class Answer(
 
 data class MysteryItem(
     val id: String,
+    val name: String,
     val locationId: String,
     val point: Int,
     val foundImage: Binary,
-    val unfoundedImage: Binary
+    val unfoundedImage: Binary,
+    val description: String?,
 ) {
     constructor(mysteryItemReq: MysteryItemReq): this(
         MoraxUtils.newUUID(),
+        mysteryItemReq.name,
         mysteryItemReq.locationId,
         mysteryItemReq.point,
         Binary(BsonBinarySubType.BINARY, mysteryItemReq.foundImage.bytes),
         Binary(BsonBinarySubType.BINARY, mysteryItemReq.unfoundedImage.bytes),
+        mysteryItemReq.description
     )
 
     fun update(mysteryItemReq: MysteryItemReq): MysteryItem {
         return MysteryItem(
             this.id,
+            mysteryItemReq.name,
             mysteryItemReq.locationId,
             mysteryItemReq.point,
             Binary(BsonBinarySubType.BINARY, mysteryItemReq.foundImage.bytes),
             Binary(BsonBinarySubType.BINARY, mysteryItemReq.unfoundedImage.bytes),
+            mysteryItemReq.description
         )
     }
 }

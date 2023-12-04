@@ -127,7 +127,8 @@ data class QuizReq(
     val question: String,
     val point: Int,
     val correctAnswer: String,
-    val image: MultipartFile
+    val image: MultipartFile,
+    val description: String
 )
 
 
@@ -138,7 +139,8 @@ data class QuizResp(
     val point: Int,
     val correctAnswer: String,
     val image: Binary,
-    val answers: List<AnswerResp>
+    val answers: List<AnswerResp>,
+    val description: String?,
 ) {
     constructor(quiz: Quiz, answers: List<AnswerResp>) : this(
         quiz.id,
@@ -147,7 +149,8 @@ data class QuizResp(
         quiz.point,
         quiz.correctAnswer,
         quiz.image,
-        answers
+        answers,
+        quiz.description
     )
 }
 
@@ -188,29 +191,35 @@ data class SearchResp(
 )
 
 data class MysteryItemReq(
+    val name: String,
     val locationId: String,
     val point: Int,
     val foundImage: MultipartFile,
-    val unfoundedImage: MultipartFile
+    val unfoundedImage: MultipartFile,
+    val description: String,
 )
 
 data class MysteryItemResp(
     val id: String,
+    val name: String,
     val locationId: String,
     val point: Int,
     val foundImage: Binary,
     val unfoundedImage: Binary,
     val isFound: Boolean = false,
-    val foundAt: String? = null
+    val foundAt: String? = null,
+    val description: String?,
 ) {
     constructor(mysteryItem: MysteryItem, isFound: Boolean = false, foundAt: String? = null): this(
         mysteryItem.id,
+        mysteryItem.name,
         mysteryItem.locationId,
         mysteryItem.point,
         mysteryItem.foundImage,
         mysteryItem.unfoundedImage,
         isFound,
-        foundAt
+        foundAt,
+        mysteryItem.description
     )
 }
 
