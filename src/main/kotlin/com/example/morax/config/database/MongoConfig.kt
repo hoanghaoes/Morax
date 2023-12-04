@@ -32,14 +32,6 @@ class MongoConfig(
         val mongoClientSettings = MongoClientSettings.builder()
             .retryWrites(true)
             .applyConnectionString(connectionStr)
-            .applyToConnectionPoolSettings{builder ->
-                builder.maxSize(100)
-                    .minSize(5)
-                    .maxConnectionLifeTime(30, TimeUnit.MINUTES)
-            }
-            .applyToSocketSettings{builder ->
-                builder.connectTimeout(2000, TimeUnit.MILLISECONDS)
-            }
             .writeConcern(WriteConcern.ACKNOWLEDGED)
             .readConcern(ReadConcern.AVAILABLE)
             .build()
@@ -48,7 +40,7 @@ class MongoConfig(
 
     fun mongoTemplate(dbName: String, mongoUri: String): MongoTemplate {
         val template = MongoTemplate(mongoClient(mongoUri), dbName)
-        template.setReadPreference(ReadPreference.secondaryPreferred())
+//        template.setReadPreference(ReadPreference.secondaryPreferred())
         template.setWriteConcern(WriteConcern.MAJORITY)
         return template
     }

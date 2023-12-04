@@ -25,8 +25,8 @@ class FactRepoImpl(
         throw ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find any fact with id $id")
     }
 
-    override fun updateFact(id: String, fact: Fact): Fact {
-        TODO("Not yet implemented")
+    override fun updateFact(updatedFact: Fact): Fact {
+        return mongoTemplate.save(updatedFact)
     }
 
     override fun deleteFact(id: String) {

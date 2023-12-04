@@ -6,6 +6,6 @@ interface FactRepo {
     fun addFact(fact: Fact): Fact
     fun getAllFacts(): List<Fact>
     fun getFactById(id: String): Fact
-    fun updateFact(id: String, fact: Fact): Fact
+    fun updateFact(updatedFact: Fact): Fact
     fun deleteFact(id: String)
 }
