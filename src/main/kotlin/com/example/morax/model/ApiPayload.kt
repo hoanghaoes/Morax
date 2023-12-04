@@ -48,7 +48,8 @@ data class LocationReq(
     val latitude: Double,
     val longitude: Double,
     val image: MultipartFile,
-    val description: String
+    val description: String,
+    val fact: String,
 )
 
 data class LocationResp(
@@ -59,7 +60,8 @@ data class LocationResp(
     val longitude: Double,
     val image: Binary,
     val description: String,
-    var artifacts: List<Artifact>
+    var artifacts: List<Artifact>,
+    val fact: String?,
 ) {
     constructor(location: Location): this(
         location.id,
@@ -69,7 +71,8 @@ data class LocationResp(
         location.longitude,
         location.image,
         location.description,
-        listOf()
+        listOf(),
+        location.fact
     )
 }
 

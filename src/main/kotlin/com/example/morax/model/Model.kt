@@ -117,7 +117,8 @@ data class Location(
     val latitude: Double,
     val longitude: Double,
     val image: Binary,
-    val description: String
+    val description: String,
+    val fact: String?,
 ) {
     constructor(locationReq: LocationReq): this(
         MoraxUtils.newUUID(),
@@ -126,7 +127,8 @@ data class Location(
         locationReq.latitude,
         locationReq.longitude,
         Binary(BsonBinarySubType.BINARY, locationReq.image.bytes),
-        locationReq.description
+        locationReq.description,
+        locationReq.fact
     )
 
     fun update(locationReq: LocationReq): Location {
@@ -137,7 +139,8 @@ data class Location(
             latitude = locationReq.latitude,
             longitude = locationReq.longitude,
             image = Binary(BsonBinarySubType.BINARY, locationReq.image.bytes),
-            description = locationReq.description
+            description = locationReq.description,
+            fact = locationReq.fact
         )
     }
 }
